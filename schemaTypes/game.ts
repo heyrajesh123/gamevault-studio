@@ -1,11 +1,11 @@
-export const gameSchema = {
-  name: 'game',
-  title: 'Game',
+export const appSchema = {
+  name: 'app',
+  title: 'App',
   type: 'document',
   fields: [
     {
-      name: 'title',
-      title: 'Game Title',
+      name: 'name',
+      title: 'App Name',
       type: 'string',
       validation: (Rule: any) => Rule.required(),
     },
@@ -13,88 +13,138 @@ export const gameSchema = {
       name: 'slug',
       title: 'URL Slug',
       type: 'slug',
-      description: 'Auto-generated URL (e.g. cyber-legends)',
-      options: {
-        source: 'title',
-        maxLength: 96,
-      },
+      description: 'Auto URL — e.g. yono-rummy',
+      options: { source: 'name', maxLength: 96 },
       validation: (Rule: any) => Rule.required(),
     },
     {
-      name: 'description',
-      title: 'Description',
-      type: 'text',
-      rows: 3,
+      name: 'logo',
+      title: 'App Logo',
+      type: 'image',
+      options: { hotspot: true },
       validation: (Rule: any) => Rule.required(),
     },
     {
-      name: 'genre',
-      title: 'Genre',
+      name: 'category',
+      title: 'Category',
       type: 'string',
       options: {
         list: [
-          { title: 'Action', value: 'Action' },
-          { title: 'RPG', value: 'RPG' },
-          { title: 'Strategy', value: 'Strategy' },
-          { title: 'Puzzle', value: 'Puzzle' },
-          { title: 'Sports', value: 'Sports' },
-          { title: 'Horror', value: 'Horror' },
-          { title: 'Adventure', value: 'Adventure' },
-          { title: 'Simulation', value: 'Simulation' },
-          { title: 'Other', value: 'Other' },
+          { title: 'Top Rated', value: 'top-rated' },
+          { title: 'New Games', value: 'new-games' },
+          { title: 'Other Games', value: 'other-games' },
         ],
       },
       validation: (Rule: any) => Rule.required(),
     },
     {
-      name: 'rating',
-      title: 'Rating (1-5 Stars)',
+      name: 'bonus',
+      title: 'Sign-Up Bonus (₹)',
       type: 'number',
-      options: { list: [1, 2, 3, 4, 5] },
-      validation: (Rule: any) => Rule.required().min(1).max(5),
+      validation: (Rule: any) => Rule.required(),
     },
     {
-      name: 'websiteLink',
-      title: 'Game Website Link',
+      name: 'minWithdraw',
+      title: 'Minimum Withdrawal (₹)',
+      type: 'number',
+      validation: (Rule: any) => Rule.required(),
+    },
+    {
+      name: 'version',
+      title: 'App Version',
+      type: 'string',
+    },
+    {
+      name: 'size',
+      title: 'APK Size (MB)',
+      type: 'string',
+    },
+    {
+      name: 'downloadLink',
+      title: 'Download / Website Link',
       type: 'url',
       validation: (Rule: any) => Rule.required(),
     },
     {
-      name: 'image',
-      title: 'Game Image / Banner',
-      type: 'image',
-      options: { hotspot: true },
+      name: 'rating',
+      title: 'Rating (1-5)',
+      type: 'number',
+      initialValue: 4,
+      validation: (Rule: any) => Rule.min(1).max(5),
     },
     {
-      name: 'featured',
-      title: 'Featured Game?',
+      name: 'reviewCount',
+      title: 'Review Count',
+      type: 'number',
+      initialValue: 0,
+    },
+    {
+      name: 'perRefer',
+      title: 'Reward per Refer (₹)',
+      type: 'number',
+    },
+    {
+      name: 'developerName',
+      title: 'Package Name / Developer',
+      type: 'string',
+    },
+    {
+      name: 'metaTitle',
+      title: 'SEO Meta Title',
+      type: 'string',
+      description: 'Leave blank to auto-generate',
+    },
+    {
+      name: 'metaDescription',
+      title: 'SEO Meta Description',
+      type: 'text',
+      rows: 3,
+      description: 'Leave blank to auto-generate',
+    },
+    {
+      name: 'appInformation',
+      title: 'App Information (HTML allowed)',
+      type: 'text',
+      rows: 6,
+    },
+    {
+      name: 'screenshots',
+      title: 'Screenshots',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'image', title: 'Screenshot', type: 'image', options: { hotspot: true } },
+            { name: 'altText', title: 'Alt Text', type: 'string' },
+          ],
+          preview: {
+            select: { media: 'image', title: 'altText' },
+          },
+        },
+      ],
+    },
+    {
+      name: 'telegramLink',
+      title: 'Telegram Channel Link',
+      type: 'url',
+    },
+    {
+      name: 'isFeatured',
+      title: 'Featured App?',
       type: 'boolean',
       initialValue: false,
     },
-    {
-      name: 'badge',
-      title: 'Badge (optional)',
-      type: 'string',
-      description: 'e.g. "New", "Hot", "Free", "18+"',
-    },
-    {
-      name: 'developer',
-      title: 'Developer Name',
-      type: 'string',
-    },
-    {
-      name: 'ageRating',
-      title: 'Age Rating',
-      type: 'string',
-      options: {
-        list: ['All Ages', '7+', '13+', '18+'],
-      },
-    },
   ],
   preview: {
-    select: { title: 'title', genre: 'genre', media: 'image' },
-    prepare({ title, genre, media }: any) {
-      return { title, subtitle: genre, media };
+    select: { title: 'name', subtitle: 'category', media: 'logo' },
+    prepare({ title, subtitle, media }: any) {
+      const cats: Record<string, string> = {
+        'top-rated': '⭐ Top Rated',
+        'new-games': '🆕 New',
+        'other-games': '🎮 Other',
+      };
+      return { title, subtitle: cats[subtitle] || subtitle, media };
     },
   },
 };
