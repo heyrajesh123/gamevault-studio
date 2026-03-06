@@ -1,6 +1,6 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
-import { gameSchema } from "./schemaTypes/game";
+import { appSchema } from "./schemaTypes/game";
 
 export default defineConfig({
   name: "gamevault-studio",
@@ -9,6 +9,6 @@ export default defineConfig({
   dataset: "production",
   plugins: [structureTool()],
   schema: {
-    types: [gameSchema],
+    types: [appSchema],
   },
 });
