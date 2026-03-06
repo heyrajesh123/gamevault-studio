@@ -10,6 +10,17 @@ export const gameSchema = {
       validation: (Rule: any) => Rule.required(),
     },
     {
+      name: 'slug',
+      title: 'URL Slug',
+      type: 'slug',
+      description: 'Auto-generated URL (e.g. cyber-legends)',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+      validation: (Rule: any) => Rule.required(),
+    },
+    {
       name: 'description',
       title: 'Description',
       type: 'text',
@@ -39,52 +50,51 @@ export const gameSchema = {
       name: 'rating',
       title: 'Rating (1-5 Stars)',
       type: 'number',
-      options: {
-        list: [1, 2, 3, 4, 5],
-      },
+      options: { list: [1, 2, 3, 4, 5] },
       validation: (Rule: any) => Rule.required().min(1).max(5),
     },
     {
       name: 'websiteLink',
       title: 'Game Website Link',
       type: 'url',
-      description: 'Link to the game website (e.g. https://mygame.com)',
       validation: (Rule: any) => Rule.required(),
     },
     {
       name: 'image',
       title: 'Game Image / Banner',
       type: 'image',
-      options: {
-        hotspot: true,
-      },
+      options: { hotspot: true },
     },
     {
       name: 'featured',
       title: 'Featured Game?',
       type: 'boolean',
-      description: 'Show this game in the Featured section at top',
       initialValue: false,
     },
     {
       name: 'badge',
-      title: 'Badge Label (optional)',
+      title: 'Badge (optional)',
       type: 'string',
       description: 'e.g. "New", "Hot", "Free", "18+"',
     },
+    {
+      name: 'developer',
+      title: 'Developer Name',
+      type: 'string',
+    },
+    {
+      name: 'ageRating',
+      title: 'Age Rating',
+      type: 'string',
+      options: {
+        list: ['All Ages', '7+', '13+', '18+'],
+      },
+    },
   ],
   preview: {
-    select: {
-      title: 'title',
-      genre: 'genre',
-      media: 'image',
-    },
+    select: { title: 'title', genre: 'genre', media: 'image' },
     prepare({ title, genre, media }: any) {
-      return {
-        title,
-        subtitle: genre,
-        media,
-      };
+      return { title, subtitle: genre, media };
     },
   },
 };
